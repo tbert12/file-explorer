@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
 var fs = require('fs');
 var fse = require('fs-extra');
+var path = require('path');
+var prettysize = require('prettysize');
 
 var upload = multer(); // for parsing multipart/form-data
 
@@ -12,19 +14,29 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 
-var testFolder = "C:/Users/Tomi";
+var testFolder = "C:/Users/Tomi/Documents";
 
 function generateJson(item, isFolder) {
-
+	var stats = fs.statSync(item);
+	return {
+		"name": path.basename(item),
+		"rights":"",
+		"size":(isFolder) ? "-" : prettysize(stats["size"]),
+		"date": stats["birthtime"],
+		"type": (isFolder) ? "dir" : "file"
+	};
 }
 
 function getFiles(dir, files_){
+	dir = testFolder + dir;
     files_ = files_ || [];
     var files = fs.readdirSync(dir);
+    console.log("[INFO] Readdir \"" + dir + "\"");
     for (var i in files){
         var name = dir + '/' + files[i];
         var isFolder = fs.statSync(name).isDirectory();
-        files_.push(name,isFolder);
+        console.log("[INFO] Generate JSON for \"" + name + "\"");
+        files_.push( generateJson(name,isFolder) );
     }
     return files_;
 }
@@ -34,29 +46,16 @@ app.get('/', function (req, res) {
 });
 
 app.post('/list', function(req,res) {
+	
+	console.log("\n==================BODY==================\n");
 	console.dir(req.body);
-	fs.readdir(testFolder, (err, files) => {
-		files.forEach(file => {
-			console.log(file);
-		});
-	});
-	res.json({ "result": [ 
-	    {
-	        "name": "magento",
-	        "rights": "drwxr-xr-x",
-	        "size": "4096",
-	        "date": "2016-03-03 15:31:40",
-	        "type": "dir"
-	    }, {
-	        "name": "index.php",
-	        "rights": "-rw-r--r--",
-	        "size": "549923",
-	        "date": "2016-03-03 15:31:40",
-	        "type": "file"
-	    }
-	]});
+	console.log("\n==================ENDBODY==================\n");
+	
+	var files = getFiles(req.body.path);
+
+	res.json( {"result" : files } );
 })
 
 app.listen(8080, function() {
-	console.log("App is running in port 8080");
+	console.log("[INFO] App is running in port 8080");
 });

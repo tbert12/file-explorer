@@ -12,7 +12,8 @@
   	"express" : "*",
     "body-parser" : "*",
     "multer" : "*",
-    "fs-extra": "*"
+    "fs-extra": "*",
+    "prettysize" : "*"
   },
   "author": "tbert",
   "license": "ISC"
