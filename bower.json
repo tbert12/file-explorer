@@ -1,9 +1,7 @@
 {
   "name": "file-manager",
   "version": "1",
-  "keywords": [
-    "filemanager"
-  ],
+  "directory": "public/components",
   "license": "MIT",
   "ignore": [
     "**/.*",
