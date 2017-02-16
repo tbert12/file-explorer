@@ -1,0 +1,8 @@
+{
+  "log" : {
+    "file" : "logs/file-explorer.log",
+    "level" : 3
+  },
+  "port" : 80,
+  "share_folder" : "D:/Musica"
+}

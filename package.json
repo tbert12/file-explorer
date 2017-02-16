@@ -3,17 +3,20 @@
   "version": "1.0.0",
   "description": "File Explorer",
   "main": "index.js",
+  "repository" : "https://github.com/tbert12/file-explorer",
   "scripts": {
-    "postinstall": "bower install",
-  	"start" : "node index.js", 
+    "postinstall": "node_modules/.bin/bower install",
+    "start": "node_modules/.bin/supervisor -i /public,/logs -q index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies" : {
-  	"express" : "*",
-    "body-parser" : "*",
-    "multer" : "*",
+  "dependencies": {
+    "body-parser": "*",
+    "bower": "^1.8.0",
+    "express": "*",
     "fs-extra": "*",
-    "prettysize" : "*"
+    "multer": "*",
+    "log4js" : "*",
+    "supervisor" : "*"
   },
   "author": "tbert",
   "license": "ISC"
